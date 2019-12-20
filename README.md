@@ -8,7 +8,7 @@ Include "malloc.h" in your main too.
 
 Add a line leakcheck(); before your main's return.
 
-It should look like this:
+It should be something like this:
 
 	#include "malloc.h"
 
