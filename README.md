@@ -10,14 +10,11 @@ Add a line leakcheck(); before your main's return.
 
 It should look like this:
 
-------------------------
+	#include "malloc.h"
 
-\#include "malloc.h"
-
-int		main()
-{
+	int		main()
+	{
 	/* your code */
 	leakcheck();
 	return (0);
-}
-------------------------
+	}
