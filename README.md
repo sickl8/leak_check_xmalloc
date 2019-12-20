@@ -14,7 +14,7 @@ It should look like this:
 
 	int		main()
 	{
-	/* your code */
-	leakcheck();
-	return (0);
+		/* your code */
+		leakcheck();
+		return (0);
 	}
