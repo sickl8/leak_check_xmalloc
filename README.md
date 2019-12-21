@@ -6,7 +6,7 @@ Replace <stdlib.h> with "malloc.h".
 
 Include "malloc.h" in your main too.
 
-Add a line leakcheck(); before your main's return.
+Add a line leakcheck(); or leakcheckfull(); before your main's return.
 
 It should be something like this:
 
