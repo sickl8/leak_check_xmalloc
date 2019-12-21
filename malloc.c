@@ -127,12 +127,13 @@ void	xfree(void *adr)
 void	leakcheck()
 {
 	t_blk	*tmp;
-	int		i;
+	int		i, l;
 	size_t	x, j, k;
 
 	k = 0;
 	j = 0;
 	i = 5;
+	l = 0;
 	tmp = _x;
 	while (tmp && i)
 	{
@@ -144,6 +145,7 @@ void	leakcheck()
 			printf("%s\n", tmp->trace[x++]);
 		k += tmp->bytes;
 		tmp = tmp->next;
+		l++;
 		i--;
 	}
 	if (tmp)
@@ -152,6 +154,7 @@ void	leakcheck()
 			k += tmp->bytes;
 			tmp = tmp->next;
 			j++;
+			l++;
 		}
 	if (j)
 		printf("-----------------------------------\nand %zu more unfreed allocation%s...\n", j, (j - 1 ? "s" : ""));
@@ -160,8 +163,47 @@ void	leakcheck()
 		printf("\033[0;32m");
 	else if (k)
 		printf("\033[0;31m");
-	printf("%zu total allocation%s, %zu free%s, %zu byte%s lost.\033[0m\n", m_count, ((int)m_count - 1 ? "s" : "")
-	, f_count, ((int)f_count - 1 ? "s" : ""), k, ((int)k - 1 ? "s" : ""));
+	printf("%zu total allocation%s, %zu free%s, %zu byte%s lost in %d block%s.\033[0m\n", m_count, ((int)m_count - 1 ? "s" : "")
+	, f_count, ((int)f_count - 1 ? "s" : ""), k, ((int)k - 1 ? "s" : ""), l, ((int)l - 1 ? "s" : ""));
+	tmp = _x;
+	while (tmp)
+	{
+		_x = _x->next;
+		free(tmp->trace);
+		free(tmp);
+		tmp = _x;
+	}
+}
+
+void	leakcheckfull()
+{
+	t_blk	*tmp;
+	size_t	x, j, k;
+	int		i;
+
+	k = 0;
+	j = 0;
+	i = 0;
+	tmp = _x;
+	while (tmp)
+	{
+		printf("-----------------------------------\n");
+		printf("address: %p, bytes: %zu\n", tmp->addr, tmp->bytes);
+		x = 0;
+		printf("traceback:\n");
+		while (x < tmp->size)
+			printf("%s\n", tmp->trace[x++]);
+		k += tmp->bytes;
+		i++;
+		tmp = tmp->next;
+	}
+	printf("-----------------------------------\n");
+	if (!k)
+		printf("\033[0;32m");
+	else if (k)
+		printf("\033[0;31m");
+	printf("%zu total allocation%s, %zu free%s, %zu byte%s lost in %d block%s.\033[0m\n", m_count, ((int)m_count - 1 ? "s" : "")
+	, f_count, ((int)f_count - 1 ? "s" : ""), k, ((int)k - 1 ? "s" : ""), i, ((int)i - 1 ? "s" : ""));
 	tmp = _x;
 	while (tmp)
 	{

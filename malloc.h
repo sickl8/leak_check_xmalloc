@@ -16,3 +16,4 @@
 void	*xmalloc(size_t xbytes);
 void	xfree(void *adr);
 void	leakcheck();
+void	leakcheckfull();
