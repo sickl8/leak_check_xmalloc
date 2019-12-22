@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <execinfo.h>
+#define N leakcheck
+#define F leakcheckfull
 
 typedef struct	s_blk
 {
@@ -216,5 +218,6 @@ void	leakcheckfull()
 
 void	xexit(int x)
 {
+	L_C();
 	exit(x);
 }
