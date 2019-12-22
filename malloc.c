@@ -10,22 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef L_C
+
+# define L_C R
+
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <execinfo.h>
-#ifndef L_C
-#define L_C N
-#endif
 #define N leakcheck
 #define F leakcheckfull
+#define R _Nan
 
 typedef struct	s_blk
 {
-	void			*addr;
+	size_t			addr;
 	size_t			bytes;
+	size_t			size;
 	void			*callstack[128];
 	char			**trace;
-	size_t			size;
 	struct s_blk	*next;
 }				t_blk;
 
@@ -36,7 +40,6 @@ void	*xmalloc(size_t xbytes)
 {
 	void			*rtn;
 	t_blk			*tmp;
-	size_t			size;
 
 	if (!xbytes)
 		return (NULL);
@@ -52,7 +55,7 @@ void	*xmalloc(size_t xbytes)
 		}
 		_x->size = backtrace(_x->callstack, 128);
 		_x->trace = backtrace_symbols(_x->callstack, _x->size);
-		_x->addr = rtn;
+		_x->addr = (size_t)rtn;
 		_x->bytes = xbytes;
 		_x->next = NULL;
 	}
@@ -76,7 +79,7 @@ void	*xmalloc(size_t xbytes)
 		tmp = tmp->next;
 		tmp->size = backtrace(tmp->callstack, 128);
 		tmp->trace = backtrace_symbols(tmp->callstack, tmp->size);
-		tmp->addr = rtn;
+		tmp->addr = (size_t)rtn;
 		tmp->bytes = xbytes;
 		tmp->next = NULL;
 	}
@@ -93,7 +96,7 @@ void	xfree(void *adr)
 	tmp = _x;
 	if (tmp && adr)
 	{
-		if (tmp->addr == adr)
+		if (tmp->addr == (size_t)adr)
 		{
 			_x = tmp->next;
 			free(tmp->trace);
@@ -103,12 +106,12 @@ void	xfree(void *adr)
 		}
 		else
 		{
-			while (tmp && tmp->addr != adr)
+			while (tmp && tmp->addr != (size_t)adr)
 			{
 				tm = tmp;
 				tmp = tmp->next;
 			}
-			if (tmp && adr == tmp->addr)
+			if (tmp && tmp->addr == (size_t)adr)
 			{
 				t = tmp->next;
 				tm->next = t;
@@ -145,7 +148,7 @@ void	leakcheck()
 	while (tmp && i)
 	{
 		printf("-----------------------------------\n");
-		printf("address: %p, bytes: %zu\n", tmp->addr, tmp->bytes);
+		printf("address: %p, bytes: %zu\n", (void*)tmp->addr, tmp->bytes);
 		x = 0;
 		printf("traceback:\n");
 		while (x < tmp->size)
@@ -195,7 +198,7 @@ void	leakcheckfull()
 	while (tmp)
 	{
 		printf("-----------------------------------\n");
-		printf("address: %p, bytes: %zu\n", tmp->addr, tmp->bytes);
+		printf("address: %p, bytes: %zu\n", (void*)tmp->addr, tmp->bytes);
 		x = 0;
 		printf("traceback:\n");
 		while (x < tmp->size)
@@ -211,6 +214,20 @@ void	leakcheckfull()
 		printf("\033[0;31m");
 	printf("%zu total allocation%s, %zu free%s, %zu byte%s lost in %d block%s.\033[0m\n", m_count, ((int)m_count - 1 ? "s" : "")
 	, f_count, ((int)f_count - 1 ? "s" : ""), k, ((int)k - 1 ? "s" : ""), i, ((int)i - 1 ? "s" : ""));
+	tmp = _x;
+	while (tmp)
+	{
+		_x = _x->next;
+		free(tmp->trace);
+		free(tmp);
+		tmp = _x;
+	}
+}
+
+void	_Nan()
+{
+	t_blk	*tmp;
+
 	tmp = _x;
 	while (tmp)
 	{
