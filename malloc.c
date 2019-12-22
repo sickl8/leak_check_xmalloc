@@ -6,7 +6,7 @@
 /*   By: isaadi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 21:15:17 by isaadi            #+#    #+#             */
-/*   Updated: 2019/12/22 14:58:30 by ael-bahr         ###   ########.fr       */
+/*   Updated: 2019/12/22 15:37:23 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	*xmalloc(size_t xbytes)
 	{
 		if (!(_x = (t_blk*)malloc(sizeof(t_blk))))
 		{
+			free(rtn);
 			printf("xmalloc failed.\n");
 			return (NULL);
 		}
@@ -60,6 +61,7 @@ void	*xmalloc(size_t xbytes)
 		if (!(tmp->next = (t_blk*)malloc(sizeof(t_blk))))
 		{
 			printf("xmalloc failed.\n");
+			free(rtn);
 			while (tmp)
 			{
 				tmp = _x->next;
