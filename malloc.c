@@ -6,13 +6,15 @@
 /*   By: isaadi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 21:15:17 by isaadi            #+#    #+#             */
-/*   Updated: 2019/12/19 21:15:19 by isaadi           ###   ########.fr       */
+/*   Updated: 2019/12/22 14:58:30 by ael-bahr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <execinfo.h>
+#define N leakcheck
+#define F leakcheckfull
 
 typedef struct	s_blk
 {
@@ -212,4 +214,10 @@ void	leakcheckfull()
 		free(tmp);
 		tmp = _x;
 	}
+}
+
+void	xexit(int x)
+{
+	L_C();
+	exit(x);
 }

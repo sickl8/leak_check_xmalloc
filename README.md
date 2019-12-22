@@ -15,6 +15,12 @@ It should be something like this:
 	int		main()
 	{
 		/* your code */
-		leakcheck();
+		leakcheck(); //or leakcheckfull();
 		return (0);
 	}
+
+If you're also using exit() in your code, compile everything with the following define:
+
+	gcc ... -D L_C=N //for leakcheck();
+	
+	gcc ... -D L_C=F //for leakcheckfull();
