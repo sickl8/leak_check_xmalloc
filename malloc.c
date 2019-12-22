@@ -6,13 +6,16 @@
 /*   By: isaadi <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 21:15:17 by isaadi            #+#    #+#             */
-/*   Updated: 2019/12/22 15:37:23 by isaadi           ###   ########.fr       */
+/*   Updated: 2019/12/22 15:56:34 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <execinfo.h>
+#ifndef L_C
+#define L_C N
+#endif
 #define N leakcheck
 #define F leakcheckfull
 
