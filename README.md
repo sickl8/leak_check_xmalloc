@@ -19,23 +19,8 @@ It should be something like this:
 		return (0);
 	}
 
-# cub3D/miniRT Section (MinilibX)
+If you're also using exit() in your code, compile everything with the following define:
 
-To test memory leaks for cub3D Project or MinilibX for general
-
-Replace <stdlib.h> with "malloc.h".
-
-Include "malloc.h" in your main too.
-
-Add a line leakcheck(); or leakcheckfull(); before your quit function.
-
-It should be something like this:
-
-    #include "malloc.h"
-
-    int     ft_quit()
-    {
-        /* your code */
-        leakcheck(); //or leakcheckfull();
-        exit(EXIT_SUCCESS);
-    }
+	gcc ... -D L_C=N //for leakcheck();
+	
+	gcc ... -D L_C=F //for leakcheckfull();
