@@ -89,9 +89,12 @@ void	*xmalloc(size_t xbytes)
 
 void	xfree(void *adr)
 {
-	t_blk *tmp;
-	t_blk *tm;
-	t_blk *t;
+	t_blk	*tmp;
+	t_blk	*tm;
+	t_blk	*t;
+	size_t	size, i = 0;
+	void	*callstack[128];
+	char	**trace;
 
 	tmp = _x;
 	if (tmp && adr)
@@ -120,6 +123,19 @@ void	xfree(void *adr)
 				f_count++;
 				free(adr);
 			}
+			else
+			{
+				printf("\033[0;31mattempting to free non-user-allocated pointer:\033[0m\n");
+				printf("address: %p\n", adr);
+				printf("traceback:\n");
+				size = backtrace(callstack, 128);
+				trace = backtrace_symbols(callstack, size);
+				while (i < size)
+					printf("%s\n", trace[i++]);
+				free(trace);
+				printf("\033[0;31mGood luck.\033[0m\n");
+				free(adr);
+			}
 		}
 	}
 	else
@@ -128,7 +144,15 @@ void	xfree(void *adr)
 			free(adr);
 		else
 		{
-			printf("\033[0;31mattempting to free non-user-allocated pointer. Good luck.\033[0m\n");
+			printf("\033[0;31mattempting to free non-user-allocated pointer:\033[0m\n");
+			printf("address: %p\n", adr);
+			printf("traceback:\n");
+			size = backtrace(callstack, 128);
+			trace = backtrace_symbols(callstack, size);
+			while (i < size)
+				printf("%s\n", trace[i++]);
+			free(trace);
+			printf("\033[0;31mGood luck.\033[0m\n");
 			free(adr);
 		}
 	}
