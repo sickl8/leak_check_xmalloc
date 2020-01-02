@@ -2,7 +2,7 @@
 
 An alternative to valgrind.
 
-Include "malloc.h" after <stdlib.h>.
+Include "malloc.h" after every <stdlib.h> in your code.
 
 Include "malloc.h" in your main too.
 
