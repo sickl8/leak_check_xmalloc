@@ -6,14 +6,14 @@
 /*   By: isaadi <isaadi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 21:15:17 by isaadi            #+#    #+#             */
-/*   Updated: 2020/10/29 14:51:29 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/10/29 16:10:02 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#if !defined(LC) && !defined (LCF)
-	#error PLEASE EITHER DEFINE LC FOR LEAKCHEK(); OR LCF FOR LEAKCHECKFULL();
-	#error ADD "-D LC" OR "-D LCF" WHEN COMPILING
-#elif defined(LC) && defined (LCF)
+// #if !defined(LC) && !defined (LCF)
+	// #error PLEASE EITHER DEFINE LC FOR LEAKCHEK(); OR LCF FOR LEAKCHECKFULL();
+	// #error ADD "-D LC" OR "-D LCF" WHEN COMPILING
+#if defined(LC) && defined (LCF)
 	#error BOTH LC AND LCF ARE DEFINED, ONLY ONE CAN BE USED
 #endif
 
