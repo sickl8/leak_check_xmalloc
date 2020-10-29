@@ -2,25 +2,29 @@
 
 An alternative to valgrind.
 
-Include "malloc.h" after every <stdlib.h> in your code.
+Usage:
 
-Include "malloc.h" in your main too.
+	chmod +x compile.sh
+	./compile.sh MAIN_TYPE LEAKCHECK_TYPE /path/to/your/main ...
 
-Add a line leakcheck(); or leakcheckfull(); before your main's return.
+Where:
 
-It should be something like this:
+	MAIN_TYPE:
 
-	#include "malloc.h"
+	1 => main()
 
-	int		main()
-	{
-		/* your code */
-		leakcheck(); //or leakcheckfull();
-		return (0);
-	}
+	2 => main(int ac, char **av)
 
-If you're also using exit() in your code, compile everything with the following define:
+	3 => main(int ac, char **av, char **envp)
 
-	gcc ... -D L_C=N //for leakcheck();
-	
-	gcc ... -D L_C=F //for leakcheckfull();
+	LEAKCHECK_TYPE:
+
+	LC => leakcheck()
+
+	LCF => leakcheckfull()
+
+Examples:
+
+	./compile.sh 1 LC main.c gcc file1.c file2.c file3.c
+
+	./compile.sh 2 LCF main_with_ac_av.c clang file4.o file5.c file6.o -include header.h

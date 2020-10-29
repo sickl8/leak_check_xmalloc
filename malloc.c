@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   malloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: isaadi <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: isaadi <isaadi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/19 21:15:17 by isaadi            #+#    #+#             */
-/*   Updated: 2019/12/22 15:56:34 by isaadi           ###   ########.fr       */
+/*   Updated: 2020/10/29 14:51:29 by isaadi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,6 @@
 	#error BOTH LC AND LCF ARE DEFINED, ONLY ONE CAN BE USED
 #endif
 
-#if malloc == xmalloc
-	#undef malloc
-	#define malloc(x) malloc(x)
-#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <execinfo.h>
@@ -41,7 +37,6 @@ static size_t	m_count, f_count;
 
 void	*xmalloc(size_t xbytes)
 {
-	printf("call to xmalloc\n");
 	void			*rtn;
 	t_blk			*tmp;
 
@@ -93,7 +88,6 @@ void	*xmalloc(size_t xbytes)
 
 void	xfree(void *adr)
 {
-	printf("call to xfree\n");
 	t_blk	*tmp;
 	t_blk	*tm;
 	t_blk	*t;
@@ -269,7 +263,6 @@ void	_Nan()
 
 void	xexit(int x)
 {
-	printf("call to xexit\n");
 	#if defined(LC)
 		leakcheck();
 	#elif defined(LCF)

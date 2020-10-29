@@ -1,17 +1,22 @@
 #include <stdio.h>
 
-int		xmain();
-int		ymain(int ac, char *av[]);
-int		zmain(int ac, char *av[], char *envp[]);
+int		your_main_with_no_args();
+int		your_main_with_ac_av(int ac, char *av[]);
+int		your_main_with_ac_av_envp(int ac, char *av[], char *envp[]);
+void	leakcheckfull();
+void	leakcheck();
 
 #if MAIN_TYPE == 1
 
 int		main()
 {
 	int ret;
-	printf("hello before the real main\n");
-	ret = xmain();
-	//L_C();
+	ret = your_main_with_no_args();
+	#ifdef LC
+		leakcheck();
+	#else
+		leakcheckfull();
+	#endif
 	return (ret);
 }
 
@@ -20,9 +25,12 @@ int		main()
 int		main(int ac, char **av)
 {
 	int ret;
-	printf("hello before the real main\n");
-	ret = ymain(ac, av);
-	//L_C();
+	ret = your_main_with_ac_av(ac, av);
+	#ifdef LC
+		leakcheck();
+	#else
+		leakcheckfull();
+	#endif
 	return (ret);
 }
 
@@ -31,9 +39,12 @@ int		main(int ac, char **av)
 int		main(int ac, char **av, char **envp)
 {
 	int ret;
-	printf("hello before the real main\n");
-	ret = zmain(ac, av, envp);
-	//L_C();
+	ret = your_main_with_ac_av_envp(ac, av, envp);
+	#ifdef LC
+		leakcheck();
+	#else
+		leakcheckfull();
+	#endif
 	return (ret);
 }
 
