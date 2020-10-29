@@ -20,8 +20,8 @@
 # include <stddef.h>
 void	*xmalloc(size_t xbytes);
 void	xfree(void *adr);
+void	xexit(int x);
 void	leakcheck();
 void	leakcheckfull();
-void	xexit(int x);
 
 #endif

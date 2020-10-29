@@ -10,19 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef L_C
-
-# define L_C R
-
+#if !defined(LC) && !defined (LCF)
+	#error PLEASE EITHER DEFINE LC FOR LEAKCHEK(); OR LCF FOR LEAKCHECKFULL();
+	#error ADD "-D LC" OR "-D LCF" WHEN COMPILING
+#elif defined(LC) && defined (LCF)
+	#error BOTH LC AND LCF ARE DEFINED, ONLY ONE CAN BE USED
 #endif
 
+#if malloc == xmalloc
+	#undef malloc
+	#define malloc(x) malloc(x)
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <execinfo.h>
-#define N leakcheck
-#define F leakcheckfull
-#define R _Nan
-
+// #define free free
+// #define exit exit
 typedef struct	s_blk
 {
 	size_t			addr;
@@ -38,6 +41,7 @@ static size_t	m_count, f_count;
 
 void	*xmalloc(size_t xbytes)
 {
+	printf("call to xmalloc\n");
 	void			*rtn;
 	t_blk			*tmp;
 
@@ -89,6 +93,7 @@ void	*xmalloc(size_t xbytes)
 
 void	xfree(void *adr)
 {
+	printf("call to xfree\n");
 	t_blk	*tmp;
 	t_blk	*tm;
 	t_blk	*t;
@@ -264,6 +269,13 @@ void	_Nan()
 
 void	xexit(int x)
 {
-	L_C();
+	printf("call to xexit\n");
+	#if defined(LC)
+		leakcheck();
+	#elif defined(LCF)
+		leakcheckfull();
+	#else
+		_Nan();
+	#endif
 	exit(x);
 }
